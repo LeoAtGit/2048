@@ -1,0 +1,253 @@
+<canvas id="game" width="512" height="512"></canvas>
+<img id="background" src="background.png" alt="The Background" width="0" height="0"/>
+
+<script>
+
+var canvas = document.getElementById("game");
+var ctx = canvas.getContext("2d");
+
+var field = [
+    ["0","0","0","0"],
+    ["0","0","0","0"],
+    ["0","0","0","0"],
+    ["0","0","0","0"]
+	    ];
+
+field[Math.floor((Math.random() * 4))][Math.floor((Math.random() * 4))] = 2;
+
+var keylock = false;
+var keypressed = 0;
+
+function gameLoop()
+{
+    render();
+
+    if (keypressed != 0)
+    {
+	//alert("Keypress Registered");
+	//keypressed = 0;
+	update();
+	render();
+    }
+
+    window.requestAnimationFrame(gameLoop);
+}
+
+window.requestAnimationFrame(gameLoop);
+
+window.onkeydown = function (evt)
+{
+    if (keylock == false)
+    {
+        keylock = true;
+        if (evt.keyCode == 87)                                              //WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+        {
+            keypressed = 1;
+        }
+        else if (evt.keyCode == 83)                                          //SSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+        {
+            keypressed = 3;
+        }
+        else if (evt.keyCode == 65)                                         //AAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        {
+            keypressed = 4;
+        }
+        else if (evt.keyCode == 68)                                        //DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+        {
+            keypressed = 2;
+        }
+    }
+};
+
+window.onkeyup = function (evt)
+{
+    keylock = false;
+};
+
+function update()
+{
+    if (ableToMove())
+    {
+	move();
+	addNewTile();
+
+	keypressed = 0;
+    }
+}
+
+
+function ableToMove()
+{
+    switch (keypressed)
+    {
+	case (1): return checkUp (); break;
+	case (2): return checkRight(); break;
+	case (3): return checkDown(); break;
+	case (4): return checkLeft(); break;
+	default: console.log("No direction specified");
+    }
+	
+}
+
+function checkUp()
+{
+    for (var x = 0; x<4; x++)
+    {
+	for (var y = 1; y<4; y++)
+	{
+	    if (field[x][y] != 0)
+	    {
+		for (var i = 1; i<y+1; i++)
+		{
+		    if (field[x][y-i] == 0 || field[x][y-1] == field[x][y])
+		    {
+			return true;
+		    }
+		}
+	    }
+	}
+    }
+
+    return false;
+}
+
+function move()
+{
+    if (keypressed == 1)							// Nach OBEN bewegen.
+    {
+	for (var i = 0; i < 4; i++)
+	{
+	    if (field[i][0] == field[i][1] && field[i][0] != 0)
+	    {
+		field[i][0] *= 2;
+		field[i][1] = 0;
+	    }
+	    else if (field[i][1] == field[i][2] && field[i][1] != 0)
+	    {
+		field[i][1] *= 2;
+		field[i][2] = 0;
+	    }
+	    if (field[i][2] == field[i][3] && field[i][2] != 0)
+	    {
+		field[i][2] *= 2;
+		field[i][3] = 0;
+	    }
+
+	    if (field[i][0] == 0)
+	    {
+		
+	    }
+
+	    for (var j = 0; j < 3; j++)
+	    {
+		if (field[i][j] == 0)
+		{
+		    field[i][j] = field[i][j+1];
+		    field[i][j+1] = 0;
+		}
+	    }
+	}
+    }
+}
+
+function addNewTile ()
+{
+    var xRandom = Math.floor((Math.random() * 4));
+    var yRandom = Math.floor((Math.random() * 4));
+    var value = Math.floor((Math.random() * 2) + 1);
+
+    if (field[xRandom][yRandom] == 0)
+    {
+	if (value == 1)
+	{
+	    field [xRandom][yRandom] = 2;
+	} 
+	else
+	{
+	    field [xRandom][yRandom] = 4;
+	}
+    }
+    else
+    {
+	addNewTile();
+    }
+}
+
+function render()
+{
+    renderBackground();
+    renderTiles();
+}
+
+function renderBackground()
+{
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(0,0,512,512);
+}
+
+function renderTiles()
+{
+    for (var x = 0; x < 4; x++)
+    {
+	for (var y = 0; y < 4; y++)
+	{
+	    if (field[x][y] == 2)
+	    {
+		ctx.fillStyle = "#FFFF00";
+		ctx.fillRect(x*128,y*128,128,128);
+		ctx.fillStyle = "#000000";
+		ctx.font = "30px Arial";
+		ctx.fillText((field[x][y]+""),x*128+60,y*128+60);
+	    }
+
+	    if (field[x][y] == 4)
+	    {
+		ctx.fillStyle = "#FFFFAA";
+		ctx.fillRect(x*128,y*128,128,128);
+	    	ctx.fillStyle = "#000000";
+		ctx.font = "30px Arial";
+		ctx.fillText((field[x][y]+""),x*128+60,y*128+60);
+	    }
+
+	    if (field[x][y] == 8)
+	    {
+		ctx.fillStyle = "#FFFFDD";
+		ctx.fillRect(x*128,y*128,128,128);
+		ctx.fillStyle = "#000000";
+		ctx.font = "30px Arial";
+		ctx.fillText((field[x][y]+""),x*128+60,y*128+60);
+	    }
+	}
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
