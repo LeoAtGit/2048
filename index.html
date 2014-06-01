@@ -143,8 +143,6 @@ function checkDown()
     return false;
 }
 
-//TODO Write here a new function CheckRight() from scratch. Doesnt work how it is right now, it will give me a StackOverflow no matter what I do. 
-
 function checkRight()
 {
     for (var x = 0; x < 3; x++)
@@ -153,9 +151,9 @@ function checkRight()
 	{
 	    if (field[x][y] != 0)
 	    {
-		for (var i = 1; i < 3-x; i++)
+		for (var i = 1; i < 4-x; i++)
 		{
-		    if (field[x+i][y] == 0 || field[x+i][y] == field[x][y])
+		    if (field[x+i][y] == 0 || field[x+1][y] == field[x][y])
 		    {
 			return true;
 		    }
@@ -182,7 +180,7 @@ function checkLeft()
 	    {
 		for (var i = 1; i < x+1; i++)
 		{
-		    if (field[x-i][y] == 0 || field[x-i][y] == field[x][y])
+		    if (field[x-i][y] == 0 || field[x-1][y] == field[x][y])
 		    {
 			return true;
 		    }
@@ -272,7 +270,7 @@ function move()
 		loopCounter++;
 	    }
 
-	    if (field[i][0] == field[i][1] && field[i][0] != 0)
+	    /*if (field[i][0] == field[i][1] && field[i][0] != 0)
 	    {
 		field[i][1] *= 2;
 		field[i][0] = 0;
@@ -292,6 +290,28 @@ function move()
 	    {
 		field[i][1] = field[i][2];
 		field[i][2] = 0;
+	    }*/
+
+	    if (field[i][3] == field[i][2] && field[i][2] != 0)
+	    {
+		field[i][3] *= 2;
+		field[i][2] = 0;
+	    }
+	    else if (field[i][2] == field[i][1] && field[i][1] != 0)
+	    {
+		field[i][2] *= 2;
+		field[i][1] = 0;
+	    }
+	    if (field[i][1] == field[i][0] && field[i][0] != 0)
+	    {
+		field[i][1] *= 2;
+		field[i][0] = 0;
+	    }
+
+	    /*if (field[i][1] == 0)                                         //This step is done to move the tiles up how they should properly.
+	    {
+		field[i][1] = field[i][2];
+		field[i][2] = 0;
 	    }
 
 
@@ -303,7 +323,7 @@ function move()
 	}
     }
 
-    /*if (keypressed == 2)					//Nach RECHTS  bewegen
+    if (keypressed == 2)					//Nach RECHTS  bewegen
     {
 	for (var i = 0; i < 4; i++)
 	{
@@ -313,9 +333,9 @@ function move()
 	    {	    
 		for (var j = 0; j < 3; j++)
 		{
-		    if (field[j][i] != 0 && field[j][i+1] == 0)
+		    if (field[j][i] != 0 && field[j+1][i] == 0)
 		    {
-			field[j][i+1] = field[j][i];
+			field[j+1][i] = field[j][i];
 			field[j][i] = 0;
 		    }
 		}
@@ -339,7 +359,7 @@ function move()
 		field[0][i] = 0;
 	    }
 
-	    if (field[1][i] == 0)                                         //This step is done to move the tiles up how they should properly.
+	    /*if (field[1][i] == 0)                                         //This step is done to move the tiles up how they should properly.
 	    {
 		field[1][i] = field[i][2];
 		field[2][i] = 0;
@@ -351,9 +371,9 @@ function move()
 		field[i][2] = field[i][3];
 		field[i][3] = 0;
 	    }*/
-	/*}
-    }*/
-
+	}
+    }
+/*
     if (keypressed == 2)
     {
 	for (var i = 0; i < 4; i++)
@@ -374,7 +394,7 @@ function move()
 		loopCounter++;
 	    }
 	}
-    }
+    }*/
 }
 
 function addNewTile ()
